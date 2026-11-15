@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Canteen | Pre-Order & Pickup</title>
+<style>
+:root{--ink:#20251f;--muted:#68736a;--cream:#fffaf0;--paper:#fff;--green:#245c43;--green2:#367b59;--orange:#f2a541;--line:#e9e4d8;--soft:#f3f7ef;--shadow:0 12px 35px rgba(31,54,39,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+header{position:sticky;top:0;z-index:10;background:rgba(255,250,240,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{max-width:1160px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:19px;color:var(--green)}.brand-mark{width:39px;height:39px;border-radius:13px;background:var(--green);color:white;display:grid;place-items:center;font-size:21px}
+.navlinks{display:flex;gap:22px;align-items:center}.navlinks a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:650}
+.btn{border:0;border-radius:12px;background:var(--green);color:white;padding:12px 18px;font-weight:750;cursor:pointer;font-size:14px}.btn:hover{background:var(--green2)}.btn:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1160px;margin:auto;padding:0 22px 80px}
+.hero{margin:28px 0 34px;border-radius:28px;overflow:hidden;background:linear-gradient(115deg,#173e2d,#286347 62%,#51845c);color:white;display:grid;grid-template-columns:1.2fr .8fr;min-height:300px}
+.hero-copy{padding:46px 44px;align-self:center}.eyebrow{color:#ffcf82;font-size:12px;font-weight:850;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:clamp(34px,5vw,55px);line-height:1.06;margin:13px 0}.hero p{color:#e0eee3;max-width:500px;line-height:1.7;margin:0 0 24px}
+.hero .btn{background:var(--orange);color:#2c261b}.hero-art{display:grid;place-items:center;font-size:clamp(100px,18vw,190px);background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.15),transparent 62%)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 40px}.feature{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:17px;display:flex;gap:12px;align-items:center}.feature .emoji{font-size:25px}.feature b{display:block;font-size:14px}.feature small{color:var(--muted)}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:34px 0 18px}.section-head h2{margin:0;font-size:28px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:14px}
+.menu-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.search{flex:1;min-width:190px;padding:12px 15px;border:1px solid var(--line);border-radius:12px;background:white;font:inherit;outline-color:var(--green)}
+.categories{display:flex;gap:8px;overflow:auto;padding:2px 0 12px;margin-bottom:10px}.cat{white-space:nowrap;border:1px solid var(--line);border-radius:30px;padding:9px 15px;background:white;color:var(--muted);font-weight:700;cursor:pointer}.cat.active{background:var(--green);border-color:var(--green);color:white}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.food{background:white;border:1px solid var(--line);border-radius:17px;padding:17px;display:flex;flex-direction:column;min-height:164px;box-shadow:0 4px 15px rgba(31,54,39,.035)}
+.food-top{display:flex;justify-content:space-between;gap:10px}.food h3{font-size:16px;margin:0 0 7px}.food .price{font-weight:850;color:var(--green);white-space:nowrap}.food small{color:var(--muted)}.food-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:17px}.qty{display:flex;align-items:center;gap:10px;font-weight:800}.qty button{width:30px;height:30px;border:0;border-radius:9px;background:#edf3ec;color:var(--green);font-size:18px;font-weight:800;cursor:pointer}.add{border:0;background:#edf3ec;color:var(--green);border-radius:9px;padding:8px 13px;font-weight:800;cursor:pointer}
+.empty{padding:35px;text-align:center;color:var(--muted);background:white;border-radius:15px;grid-column:1/-1}
+.cart-panel,.admin-panel{margin-top:40px;background:white;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+.cart-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.cart-head h2{margin:0}.cart-count{background:#edf3ec;color:var(--green);border-radius:30px;padding:7px 12px;font-size:13px;font-weight:800}
+.cart-empty{text-align:center;padding:24px;color:var(--muted)}.cart-row{display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.cart-row small{display:block;color:var(--muted);margin-top:3px}
+.bill-box{background:var(--soft);border-radius:14px;padding:16px;margin:18px 0;border:1px solid var(--line)}
+.bill-line{display:flex;justify-content:space-between;margin-bottom:8px;font-size:15px;color:var(--muted)}
+.bill-line.highlight{font-size:18px;font-weight:850;color:var(--green);border-top:1px dashed #cbd5cc;padding-top:10px;margin-top:10px;margin-bottom:0}
+.checkout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checkout label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}
+.checkout input,.checkout select{width:100%;min-width:0;padding:13px;border:1px solid var(--line);border-radius:11px;font:inherit;background:white;outline-color:var(--green)}
+.full-span{grid-column:1/-1}
+.demo-card{grid-column:1/-1;background:#f0faff;border:1.5px solid #bfe8f7;border-radius:14px;padding:16px;margin-top:4px}
+.demo-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.demo-badge{background:#002970;color:white;padding:5px 11px;border-radius:8px;font-weight:800;font-size:13px}
+.demo-details{font-size:13px;color:#1e3a5f;line-height:1.6;margin-bottom:10px}
+.note{color:var(--muted);font-size:12px;line-height:1.5;margin-top:12px}
+footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid var(--line);font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:rgba(16,28,20,.62);z-index:30;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}.ticket{background:white;border-radius:22px;padding:28px;max-width:440px;width:100%;text-align:center;max-height:90vh;overflow:auto}.ticket .check{font-size:44px}.ticket h2{margin:8px 0}.token{font-size:42px;font-weight:900;color:var(--green);margin:10px 0}
+.ticket p{color:var(--muted);line-height:1.5;font-size:14px}.ticket-meta{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;margin:14px 0;text-align:left;font-size:13px;line-height:1.7}
+.admin-panel h2{margin-top:0}.admin-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.admin-tools input{padding:11px;border:1px solid var(--line);border-radius:10px;max-width:220px}
+.order-card{border:1px solid var(--line);border-radius:13px;padding:14px;margin-top:12px}.order-card h3{margin:0 0 6px}.order-card p{margin:4px 0;color:var(--muted);font-size:13px;line-height:1.5}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.hero-copy{padding:34px 28px 10px}.hero-art{font-size:115px;padding:8px 0 24px}.menu-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.nav{padding:11px 15px}.navlinks a{display:none}main{padding:0 14px 70px}.hero{margin-top:17px}.hero-copy{padding:29px 23px 8px}.features{grid-template-columns:1fr;gap:9px}.feature{padding:13px}.section-head h2{font-size:24px}.menu-grid{grid-template-columns:1fr 1fr;gap:9px}.food{padding:13px;min-height:160px}.food h3{font-size:14px}.food .price{font-size:14px}.cart-panel,.admin-panel{padding:17px}.checkout{grid-template-columns:1fr}.full-span,.demo-card{grid-column:auto}.cart-row{gap:8px;font-size:14px}.admin-tools input{max-width:100%;width:100%}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <div class="brand"><span class="brand-mark">🍽</span> Smart Canteen</div>
+  <nav class="navlinks"><a href="#home">Home</a><a href="#menu">Food Menu</a><a href="#cart">My Cart</a><a href="#admin">Admin</a></nav>
+  <button class="btn" onclick="document.getElementById('cart').scrollIntoView({behavior:'smooth'})">Cart <span id="navCount">0</span></button>
+</div></header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-copy"><div class="eyebrow">Campus food · Made easy</div><h1>Skip the queue.<br>Enjoy your break.</h1>
+  <p>Pre-order your favourite canteen food, choose your pickup time, view the 50% demo advance amount, and collect it fresh.</p>
+  <button class="btn" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Explore Food Menu&nbsp; →</button></div>
+  <div class="hero-art" aria-hidden="true">🍛</div>
+</section>
+
+<section class="features">
+  <div class="feature"><span class="emoji">⏰</span><div><b>Choose Pickup Time</b><small>Pick your break slot</small></div></div>
+  <div class="feature"><span class="emoji">💳</span><div><b>50% Demo Advance</b><small>No real payment is collected</small></div></div>
+  <div class="feature"><span class="emoji">🎟️</span><div><b>Instant Token</b><small>Quick pickup with token ID</small></div></div>
+</section>
+
+<section id="menu">
+  <div class="section-head"><div><h2>Explore Our Menu</h2><p>Rhythm Food Court · Prices in ₹ (sample menu — edit as needed)</p></div></div>
+  <div class="menu-tools"><input class="search" id="search" placeholder="Search food items..." oninput="renderMenu()"></div>
+  <div class="categories" id="categories"></div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<section class="cart-panel" id="cart">
+  <div class="cart-head"><h2>🛒 Your Food Cart</h2><span class="cart-count" id="cartCount">0 items</span></div>
+  <div id="cartItems" class="cart-empty">Your cart is empty. Add items from the menu!</div>
+  <div id="cartBottom" hidden>
+    <div class="bill-box">
+      <div class="bill-line"><span>Total Food Amount</span><b id="total">₹0</b></div>
+      <div class="bill-line"><span>Demo advance (50%)</span><b id="advance">₹0</b></div>
+      <div class="bill-line"><span>Remaining at pickup (50%)</span><b id="remaining">₹0</b></div>
+      <div class="bill-line highlight"><span>Total payable</span><b id="grandTotal">₹0</b></div>
+    </div>
+    <form class="checkout" id="checkoutForm">
+      <div><label for="customerName">Your name *</label><input id="customerName" required maxlength="50" placeholder="Enter your name"></div>
+      <div><label for="customerPhone">Mobile number *</label><input id="customerPhone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number"></div>
+      <div><label for="pickupTime">Pickup time *</label><select id="pickupTime" required><option value="">Choose pickup time</option><option>10:30 AM - 10:45 AM</option><option>11:00 AM - 11:15 AM</option><option>12:30 PM - 12:45 PM</option><option>01:00 PM - 01:15 PM</option><option>03:30 PM - 03:45 PM</option></select></div>
+      <div><label for="studentClass">Department / Class</label><input id="studentClass" maxlength="40" placeholder="Example: CSE - I Year"></div>
+      <div class="demo-card">
+        <div class="demo-header"><b>Demo Payment Preview</b><span class="demo-badge">PAYMENT DEMO</span></div>
+        <div class="demo-details">50% advance shown: <b id="demoAdvance">₹0</b><br>Remaining at pickup: <b id="demoRemaining">₹0</b><br><b>No money will be deducted. This button only simulates an order.</b></div>
+        <button type="submit" class="btn" style="width:100%">Place Demo Order</button>
+      </div>
+    </form>
+    <p class="note">Demo only: this website does not connect to Paytm or any bank. No real payment is made. Orders are saved only in this browser on this device.</p>
+  </div>
+</section>
+
+<section class="admin-panel" id="admin">
+  <h2>🔐 Admin – Demo Orders</h2>
+  <p class="note">For classroom demonstration only. Enter the demo PIN to view orders saved in this browser.</p>
+  <div class="admin-tools">
+    <input id="adminPin" type="password" inputmode="numeric" placeholder="Demo PIN">
+    <button class="btn" onclick="showAdminOrders()">View Orders</button>
+    <button class="btn" style="background:#68736a" onclick="clearAdminView()">Hide Orders</button>
+  </div>
+  <div id="adminOrders"></div>
+  <p class="note">Demo PIN: <b>1234</b>. Change it in the JavaScript before presenting. This is not secure authentication.</p>
+</section>
+</main>
+
+<footer>© 2026 Smart Canteen · Pre-Order & Pickup Demo</footer>
+
+<div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="ticketTitle">
+  <div class="ticket">
+    <div class="check">✅</div><h2 id="ticketTitle">Order Placed!</h2>
+    <p>Your demo order has been recorded on this device.</p>
+    <div class="token" id="tokenNumber">SC-0001</div>
+    <div class="ticket-meta" id="ticketDetails"></div>
+    <button class="btn" onclick="closeTicket()">Done</button>
+  </div>
+</div>
+
+<script>
+const menuItems = [
+  {id:1,name:"Idli (2 pcs)",category:"Breakfast",price:30,description:"Soft idlis with chutney"},
+  {id:2,name:"Dosa",category:"Breakfast",price:45,description:"Crispy dosa"},
+  {id:3,name:"Pongal",category:"Breakfast",price:40,description:"Hot pongal"},
+  {id:4,name:"Poori (2 pcs)",category:"Breakfast",price:40,description:"Poori with masala"},
+  {id:5,name:"Veg Meals",category:"Meals",price:80,description:"South Indian veg meals"},
+  {id:6,name:"Lemon Rice",category:"Meals",price:45,description:"Fresh lemon rice"},
+  {id:7,name:"Curd Rice",category:"Meals",price:40,description:"Curd rice"},
+  {id:8,name:"Veg Fried Rice",category:"Meals",price:75,description:"Vegetable fried rice"},
+  {id:9,name:"Samosa",category:"Snacks",price:15,description:"Crispy evening snack"},
+  {id:10,name:"Veg Puff",category:"Snacks",price:20,description:"Baked vegetable puff"},
+  {id:11,name:"Tea",category:"Drinks",price:12,description:"Hot tea"},
+  {id:12,name:"Fresh Lime",category:"Drinks",price:25,description:"Refreshing lime drink"}
+];
+const cart = {};
+let activeCategory = "All";
+const money = amount => "₹" + Number(amount).toFixed(2).replace(/\.00$/,"");
+const categories = ["All", ...new Set(menuItems.map(item => item.category))];
+
+function renderCategories(){
+  document.getElementById("categories").innerHTML = categories.map(category =>
+    `<button class="cat ${activeCategory===category?"active":""}" onclick="setCategory('${category}')">${category}</button>`
+  ).join("");
+}
+function setCategory(category){activeCategory=category;renderCategories();renderMenu();}
+function renderMenu(){
+  const query=document.getElementById("search").value.trim().toLowerCase();
+  const filtered=menuItems.filter(item =>
+    (activeCategory==="All" || item.category===activeCategory) &&
+    (item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query))
+  );
+  const grid=document.getElementById("menuGrid");
+  if(!filtered.length){grid.innerHTML='<div class="empty">No food items found. Try another search.</div>';return;}
+  grid.innerHTML=filtered.map(item=>`
+    <article class="food">
+      <div class="food-top"><div><h3>${item.name}</h3><small>${item.description}</small></div><span class="price">${money(item.price)}</span></div>
+      <div class="food-bottom">
+        <small>${item.category}</small>
+        <div id="food-control-${item.id}">${cart[item.id]?quantityControl(item.id):`<button class="add" onclick="changeQty(${item.id},1)">+ Add</button>`}</div>
+      </div>
+    </article>`).join("");
+}
+function quantityControl(id){
+  return `<div class="qty"><button aria-label="Decrease quantity" onclick="changeQty(${id},-1)">−</button><span>${cart[id]||0}</span><button aria-label="Increase quantity" onclick="changeQty(${id},1)">+</button></div>`;
+}
+function changeQty(id,delta){
+  cart[id]=Math.max(0,(cart[id]||0)+delta);
+  if(cart[id]===0)delete cart[id];
+  renderMenu();renderCart();
+}
+function getCartLines(){
+  return Object.entries(cart).map(([id,qty])=>{
+    const item=menuItems.find(x=>x.id===Number(id));
+    return {...item,qty,subtotal:item.price*qty};
+  });
+}
+function renderCart(){
+  const lines=getCartLines(),count=lines.reduce((sum,x)=>sum+x.qty,0);
+  const total=lines.reduce((sum,x)=>sum+x.subtotal,0);
+  const advance=Math.round(total*50)/100,remaining=total-advance;
+  document.getElementById("navCount").textContent=count;
+  document.getElementById("cartCount").textContent=count+" item"+(count===1?"":"s");
+  document.getElementById("cartItems").className=lines.length?"":"cart-empty";
+  document.getElementById("cartItems").innerHTML=lines.length?lines.map(item=>`
+    <div class="cart-row">
+      <div><b>${item.name}</b><small>${money(item.price)} each</small></div>
+      <div class="qty"><button onclick="changeQty(${item.id},-1)">−</button><span>${item.qty}</span><button onclick="changeQty(${item.id},1)">+</button></div>
+      <b>${money(item.subtotal)}</b>
+    </div>`).join(""):"Your cart is empty. Add items from the menu!";
+  document.getElementById("cartBottom").hidden=!lines.length;
+  ["total","grandTotal"].forEach(id=>document.getElementById(id).textContent=money(total));
+  document.getElementById("advance").textContent=money(advance);
+  document.getElementById("remaining").textContent=money(remaining);
+  document.getElementById("demoAdvance").textContent=money(advance);
+  document.getElementById("demoRemaining").textContent=money(remaining);
+}
+function readOrders(){
+  try{return JSON.parse(localStorage.getItem("smartCanteenOrders")||"[]");}
+  catch(error){return [];}
+}
+function saveOrders(orders){localStorage.setItem("smartCanteenOrders",JSON.stringify(orders));}
+document.getElementById("checkoutForm").addEventListener("submit",function(event){
+  event.preventDefault();
+  const lines=getCartLines();
+  if(!lines.length){alert("Your cart is empty.");return;}
+  if(!this.reportValidity())return;
+  const name=document.getElementById("customerName").value.trim();
+  const phone=document.getElementById("customerPhone").value.trim();
+  const pickup=document.getElementById("pickupTime").value;
+  const department=document.getElementById("studentClass").value.trim();
+  if(!name||!/^[0-9]{10}$/.test(phone)||!pickup){alert("Please enter your name, a valid 10-digit mobile number and pickup time.");return;}
+  const total=lines.reduce((sum,item)=>sum+item.subtotal,0);
+  const advance=Math.round(total*50)/100;
+  const orders=readOrders();
+  const token="SC-"+Date.now().toString().slice(-6);
+  const order={token,name,phone,pickup,department,items:lines,total,advance,remaining:total-advance,createdAt:new Date().toLocaleString()};
+  orders.unshift(order);
+  try{saveOrders(orders);}catch(error){alert("Could not save the order in this browser. Please check device storage.");return;}
+  document.getElementById("tokenNumber").textContent=token;
+  document.getElementById("ticketDetails").innerHTML=
+    `<b>Name:</b> ${escapeHTML(name)}<br><b>Pickup:</b> ${escapeHTML(pickup)}<br><b>Items:</b> ${lines.map(x=>`${escapeHTML(x.name)} × ${x.qty}`).join(", ")}<br><b>Total:</b> ${money(total)}<br><b>Demo advance (not paid):</b> ${money(advance)}<br><b>Remaining at pickup:</b> ${money(total-advance)}`;
+  document.getElementById("successModal").classList.add("show");
+  Object.keys(cart).forEach(key=>delete cart[key]);
+  this.reset();renderMenu();renderCart();
+});
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+}
+function closeTicket(){document.getElementById("successModal").classList.remove("show");}
+function showAdminOrders(){
+  if(document.getElementById("adminPin").value!=="1234"){alert("Incorrect demo PIN.");return;}
+  const orders=readOrders(),container=document.getElementById("adminOrders");
+  if(!orders.length){container.innerHTML='<p class="cart-empty">No demo orders have been placed on this browser yet.</p>';return;}
+  container.innerHTML=orders.map(order=>`
+    <div class="order-card">
+      <h3>${escapeHTML(order.token)} · ${escapeHTML(order.name)}</h3>
+      <p><b>Phone:</b> ${escapeHTML(order.phone)} · <b>Pickup:</b> ${escapeHTML(order.pickup)}</p>
+      <p><b>Items:</b> ${order.items.map(item=>`${escapeHTML(item.name)} × ${item.qty}`).join(", ")}</p>
+      <p><b>Total:</b> ${money(order.total)} · <b>Demo advance:</b> ${money(order.advance)} · <b>At pickup:</b> ${money(order.remaining)}</p>
+      <p><b>Department:</b> ${escapeHTML(order.department||"Not provided")} · <b>Placed:</b> ${escapeHTML(order.createdAt)}</p>
+    </div>`).join("");
+}
+function clearAdminView(){document.getElementById("adminOrders").innerHTML="";document.getElementById("adminPin").value="";}
+renderCategories();renderMenu();renderCart();
+</script>
+</body>
+</html>
