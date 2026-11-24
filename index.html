@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -252,5 +253,12 @@ function showAdminOrders(){
 function clearAdminView(){document.getElementById("adminOrders").innerHTML="";document.getElementById("adminPin").value="";}
 renderCategories();renderMenu();renderCart();
 </script>
+  const SUPABASE_URL = "https://kklflgodknmzugrsbgfu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_OpTonNCX2RGgiqM7INEYrw_u5sEYrw_u5sEuTKq";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 </body>
 </html>
